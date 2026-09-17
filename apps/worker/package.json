@@ -1,0 +1,19 @@
+{
+  "name": "@aiart/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node --import tsx src/server.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@aiart/contracts": "workspace:*",
+    "@aiart/core": "workspace:*",
+    "bullmq": "5.81.5"
+  },
+  "devDependencies": {
+    "drizzle-orm": "0.45.2"
+  }
+}

@@ -1,0 +1,40 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "ai-art-preview"
+application_url = "https://shopify.dev/apps/default-app-home"
+embedded = true
+client_id = "0601bdc397ff11db9a03a8585603fcc7"
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_orders"
+
+[auth]
+redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
+
+[webhooks]
+api_version = "2026-10"
+
+  # Order webhooks need "Protected customer data" access, requested once per app in the Shopify
+  # Dev Dashboard (app > API access > Protected customer data access). Until that is done,
+  # `shopify app dev` refuses to start with them, so they are switched off here. Re-enable by
+  # removing the leading "# " from the next three lines.
+  # [[webhooks.subscriptions]]
+  # uri = "/webhooks/shopify/orders"
+  # topics = [ "orders/create", "orders/paid", "orders/cancelled" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/shopify/privacy"
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+
+[app_proxy]
+url = "https://REPLACE_WITH_PUBLIC_URL/proxy"
+subpath = "ai-art"
+prefix = "apps"
+
+[pos]
+embedded = false

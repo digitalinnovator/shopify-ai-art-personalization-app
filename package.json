@@ -1,0 +1,37 @@
+{
+  "name": "ai-art-preview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "bootstrap": "node scripts/bootstrap.mjs",
+    "shopify:sync-env": "node scripts/sync-shopify-env.mjs",
+    "dev": "node scripts/dev.mjs",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "db:generate": "pnpm --filter @aiart/core db:generate",
+    "db:migrate": "pnpm --filter @aiart/core db:migrate",
+    "db:seed": "pnpm --filter @aiart/core db:seed",
+    "compare-models": "node --import tsx scripts/compare-models.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "pnpm --filter @aiart/e2e test",
+    "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r --parallel typecheck",
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@aiart/contracts": "workspace:*",
+    "@aiart/core": "workspace:*",
+    "@biomejs/biome": "2.5.13",
+    "@types/node": "^26.5.1",
+    "drizzle-orm": "0.45.2",
+    "tsx": "4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "5.0.0"
+  }
+}

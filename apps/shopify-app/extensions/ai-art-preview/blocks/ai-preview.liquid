@@ -1,0 +1,48 @@
+{% comment %}
+  AI Art Preview block. Add it to a product template in the theme editor and set the Design ID
+  from the admin panel's Designs screen (the value in the address bar at /designs/<id>).
+
+  The block only renders a mount point — apps/storefront/src/widget builds the actual UI once
+  `assets/ai-art-preview.js` runs (see `pnpm build:widget` and docs/GO-LIVE.md).
+{% endcomment %}
+{% if block.settings.design_id != blank %}
+  <div
+    data-ai-art-block
+    data-design-id="{{ block.settings.design_id }}"
+    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+    data-proxy-base="/apps/ai-art"
+    data-hide-theme-buttons="{{ block.settings.hide_theme_buy_buttons }}"
+    {{ block.shopify_attributes }}
+  ></div>
+{% else %}
+  {% if request.design_mode %}
+    <p style="color:#b3364f">AI Art Preview: set a Design ID in the block settings.</p>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "AI Art Preview",
+  "target": "section",
+  "stylesheet": "ai-art-preview.css",
+  "javascript": "ai-art-preview.js",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "design_id",
+      "label": "Design ID",
+      "info": "From the admin panel's Designs screen. Open a design and copy the id from the page URL."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_theme_buy_buttons",
+      "label": "Hide the theme's buy buttons",
+      "default": true,
+      "info": "Customers then add the product to the cart from this block, after choosing a preview. Turn off only if the product can also be bought without personalization."
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,28 @@
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+.react-router/
+.shopify/
+playwright-report/
+test-results/
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+
+# Local env files hold secrets
+.env
+.env.*
+!.env.example
+
+# Generated widget bundle copied into the theme extension by `pnpm build:widget`
+apps/shopify-app/extensions/ai-art-preview/assets/ai-art-preview.js
+apps/shopify-app/extensions/ai-art-preview/assets/ai-art-preview.css
+
+# Model comparison reports
+reports/
+
+# Screenshots from tests/e2e/visual.spec.ts
+tests/e2e/visual-output/

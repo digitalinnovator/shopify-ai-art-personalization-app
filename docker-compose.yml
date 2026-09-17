@@ -1,0 +1,55 @@
+# Local infrastructure only. The Node apps run on the host (`pnpm dev`).
+# Ports avoid the host's own Postgres on 5432.
+name: aiart
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: aiart
+      POSTGRES_PASSWORD: aiart
+      POSTGRES_DB: aiart
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiart -d aiart"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # S3-compatible storage. pgsty/minio is a maintained drop-in fork of MinIO
+  # (the upstream minio/minio image stopped publishing in 2025).
+  # The image has no curl, so health is polled from scripts/bootstrap.mjs.
+  storage:
+    image: pgsty/minio:latest
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: aiartadmin
+      MINIO_ROOT_PASSWORD: aiartadmin-secret
+      # Browsers upload directly to storage from the storefront harness and admin.
+      MINIO_API_CORS_ALLOW_ORIGIN: "http://localhost:5173,http://localhost:3000"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - storagedata:/data
+
+volumes:
+  pgdata:
+  redisdata:
+  storagedata:

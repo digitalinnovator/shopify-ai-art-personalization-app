@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aurora Prints | Personalized art</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /*
+      A realistic stand-in for a merchant's product page (Dawn-like), so the widget can be judged
+      in context. Everything on this page except the widget is throwaway demo chrome.
+    */
+    :root {
+      color-scheme: light;
+      --ink: #111;
+      --muted: #6b6b6b;
+      --line: #e6e6e6;
+      --soft: #f6f6f6;
+      --accent: #111;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    .announcement { background: var(--ink); color: #fff; text-align: center; font-size: 0.8rem; padding: 8px 16px; letter-spacing: 0.02em; }
+    .site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 32px; border-bottom: 1px solid var(--line); }
+    .logo { font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; text-decoration: none; }
+    .site-nav { display: flex; gap: 22px; font-size: 0.92rem; }
+    .site-nav a { text-decoration: none; color: var(--muted); }
+    .site-nav a:hover { color: var(--ink); }
+    .cart-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 8px 14px; font: inherit; font-size: 0.9rem; cursor: pointer; }
+    .cart-btn .count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 0.72rem; font-weight: 600; display: grid; place-items: center; }
+    .store { max-width: 1120px; margin: 0 auto; padding: 24px 32px 80px; }
+    .breadcrumb { font-size: 0.82rem; color: var(--muted); margin-bottom: 24px; }
+    .breadcrumb a { text-decoration: none; }
+    #loading { color: var(--muted); }
+    .product-card { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 48px; padding: 32px 0 56px; border-bottom: 1px solid var(--line); }
+    .product-card:last-of-type { border-bottom: 0; }
+    .product-gallery__main { position: relative; border-radius: 16px; overflow: hidden; background: var(--soft); aspect-ratio: 4 / 5; }
+    .product-gallery__main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-badge { position: absolute; left: 14px; top: 14px; background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+    .product-gallery__thumbs { display: flex; gap: 10px; margin-top: 12px; }
+    .product-gallery__thumb { padding: 0; border: 0; background: none; border-radius: 10px; cursor: pointer; line-height: 0; }
+    .product-gallery__thumb img { width: 72px; height: 90px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); opacity: .7; transition: opacity .15s, border-color .15s; }
+    .product-gallery__thumb:hover img { opacity: 1; }
+    .product-gallery__thumb[aria-current="true"] img { opacity: 1; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+    .product-gallery__thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+    .demo-note { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 20px; padding: 12px 16px; border: 1px dashed var(--line); border-radius: 12px; background: var(--soft); font-size: 13px; color: var(--muted); }
+    .demo-note strong { color: var(--ink); }
+    .demo-note a { color: var(--ink); font-weight: 600; }
+    .collection-title { margin: 0 0 6px; font-size: 1.8rem; letter-spacing: -0.02em; font-weight: 700; }
+    .collection-sub { margin: 0 0 28px; color: var(--muted); font-size: 0.95rem; }
+    .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 28px; }
+    .collection-item { display: flex; flex-direction: column; gap: 10px; text-decoration: none; }
+    .collection-item__img { position: relative; aspect-ratio: 4 / 5; border-radius: 16px; overflow: hidden; background: var(--soft); }
+    .collection-item__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+    .collection-item:hover .collection-item__img img { transform: scale(1.03); }
+    .collection-item__name { font-weight: 600; font-size: 1rem; }
+    .collection-item__price { color: var(--muted); font-size: 0.9rem; }
+    .collection-item__cta { margin-top: 2px; font-size: 0.85rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    .product-info { display: flex; flex-direction: column; gap: 14px; }
+    .product-eyebrow { margin: 0; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .product-title { margin: 0; font-size: 1.9rem; line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
+    .product-price { font-size: 1.25rem; font-weight: 600; }
+    .product-price .compare { color: var(--muted); text-decoration: line-through; font-weight: 400; font-size: 1rem; margin-left: 8px; }
+    .product-rating { font-size: 0.85rem; color: var(--muted); }
+    .product-rating b { color: #e8a531; letter-spacing: 2px; font-weight: 400; }
+    .product-form__buttons { display: flex; flex-direction: column; gap: 10px; max-width: 360px; }
+    .theme-button { font: inherit; font-weight: 600; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; width: 100%; }
+    .theme-button--dark { background: var(--ink); color: #fff; }
+    .product-option { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; font-weight: 600; }
+    .product-option select, .product-option input { font: inherit; font-weight: 400; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; max-width: 220px; }
+    .product-desc { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
+    .personalize { margin-top: 6px; }
+    .personalize__head { display: flex; align-items: center; gap: 10px; font-weight: 600; margin-bottom: 10px; }
+    .personalize__step { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; background: var(--soft); border-radius: 999px; padding: 4px 10px; color: var(--muted); }
+    .product-info details { border-top: 1px solid var(--line); padding: 12px 0; font-size: 0.92rem; }
+    .product-info details summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
+    .product-info details summary::after { content: "+"; color: var(--muted); }
+    .product-info details[open] summary::after { content: "–"; }
+    .product-info details p { margin: 10px 0 0; color: var(--muted); }
+    .empty { padding: 40px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; }
+
+    .dev-panel { max-width: 1120px; margin: 0 auto 40px; background: #17161d; color: #e6e4f0; border-radius: 16px; font-size: 0.88rem; }
+    .dev-panel summary { cursor: pointer; padding: 14px 20px; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 10px; }
+    .dev-panel summary::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #7cf29b; box-shadow: 0 0 0 3px rgba(124,242,155,.2); }
+    .dev-panel__body { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .dev-panel__body p { margin: 0; color: #a9a5c2; }
+    .dev-panel .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .dev-panel button { border: 1px solid #3b3956; background: #26243a; color: #fff; padding: 8px 14px; border-radius: 8px; cursor: pointer; font: inherit; font-weight: 600; font-size: 0.85rem; }
+    .dev-panel button:hover { background: #34315a; }
+    .dev-panel pre { margin: 0; background: #0f0e14; padding: 12px; border-radius: 8px; overflow: auto; max-height: 180px; font-size: 12px; line-height: 1.5; color: #d6d3ea; }
+
+    @media (max-width: 900px) {
+      .site-header { padding: 12px 16px; }
+      .site-nav { display: none; }
+      .store { padding: 16px 16px 60px; }
+      .product-card { grid-template-columns: 1fr; gap: 24px; padding: 16px 0 40px; }
+      .product-title { font-size: 1.5rem; }
+      .dev-panel { margin: 0 16px 24px; border-radius: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">Free shipping on all personalized art. Made to order in 3 to 5 days.</div>
+  <header class="site-header">
+    <a class="logo" href="/">Aurora Prints</a>
+    <nav class="site-nav" aria-label="Store">
+      <a href="/collections/all">Shop</a><a href="/collections/all">Personalized art</a><a href="/pages/about">About</a>
+    </nav>
+    <button class="cart-btn" type="button" id="cart-button" aria-label="Cart">
+      <span>Cart</span>
+      <span class="count" id="cart-count">0</span>
+    </button>
+  </header>
+
+  <main class="store">
+    <nav class="breadcrumb" aria-label="Breadcrumb" id="breadcrumb"><a href="/">Home</a> / <a href="/collections/all">Personalized art</a></nav>
+    <p class="demo-note" id="demo-note" hidden></p>
+    <p id="loading">Loading products</p>
+    <div id="products" hidden></div>
+  </main>
+
+  <details class="dev-panel" id="dev-panel" open>
+    <summary>Developer tools</summary>
+    <div class="dev-panel__body">
+      <p>This page imitates a Shopify product page. Uploads go through the dev server's app-proxy middleware, signed exactly as Shopify's real proxy signs them. The buttons below send real, HMAC-signed order webhooks to the API.</p>
+      <div class="row">
+        <button id="sim-create" type="button">Simulate order created</button>
+        <button id="sim-paid" type="button">Simulate order paid</button>
+        <button id="sim-cancel" type="button">Simulate order cancelled</button>
+        <button id="show-cart" type="button">Show cart</button>
+      </div>
+      <pre id="harness-output">Nothing yet.</pre>
+    </div>
+  </details>
+
+  <script type="module">
+    const productsEl = document.getElementById('products');
+    const loadingEl = document.getElementById('loading');
+    const cartCount = document.getElementById('cart-count');
+    const output = document.getElementById('harness-output');
+    const panel = document.getElementById('dev-panel');
+
+    // Remember whether the developer panel is open (it defaults to open for the e2e tests).
+    try {
+      const saved = localStorage.getItem('aiart:harness:devpanel');
+      if (saved === 'closed') panel.open = false;
+      panel.addEventListener('toggle', () => localStorage.setItem('aiart:harness:devpanel', panel.open ? 'open' : 'closed'));
+    } catch {}
+
+    async function refreshCart() {
+      try {
+        const cart = await fetch('/cart.js').then((r) => r.json());
+        cartCount.textContent = String(cart.item_count ?? 0);
+        return cart;
+      } catch {
+        return null;
+      }
+    }
+    document.addEventListener('aiart:added', () => void refreshCart());
+    void refreshCart();
+
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+    function productSection(design) {
+      const section = document.createElement('section');
+      section.className = 'product-card';
+      section.id = `product-${design.slug}`;
+      const images = design.exampleImageUrls?.length ? design.exampleImageUrls : design.exampleImageUrl ? [design.exampleImageUrl] : [];
+      const mainImg = images[0] ? `<img src="${esc(images[0])}" alt="${esc(design.name)} example" data-gallery-main />` : '';
+      const thumbs = images
+        .map(
+          (src, i) =>
+            `<button type="button" class="product-gallery__thumb" aria-current="${i === 0}" aria-label="Show example ${i + 1} of ${images.length}" data-gallery-thumb="${esc(src)}">
+              <img src="${esc(src)}" alt="" />
+            </button>`,
+        )
+        .join('');
+      section.innerHTML = `
+        <div class="product-gallery">
+          <div class="product-gallery__main">${mainImg}<span class="product-badge">AI personalized</span></div>
+          ${images.length > 1 ? `<div class="product-gallery__thumbs">${thumbs}</div>` : ''}
+        </div>
+        <div class="product-info">
+          <p class="product-eyebrow">Personalized art print</p>
+          <h2 class="product-title">${esc(design.name)}</h2>
+          <div class="product-price">$${esc(design.price)} <span class="compare">$65.00</span></div>
+          <div class="product-rating"><b>★★★★★</b> 4.9 (212 reviews)</div>
+          <!-- Same structure as Shopify's Dawn theme: an installment form that only carries the
+               variant id, the quantity box outside the product form (linked with form=""), and the
+               theme's own Add to cart and Buy it now buttons inside the product form. -->
+          <form class="installment" action="/cart/add" method="post"><input type="hidden" name="id" value="${esc(design.variantId)}" /></form>
+          <label class="product-option">Size
+            <select name="id" form="product-form-${esc(design.slug)}">${(design.variants ?? []).map((v) => `<option value="${esc(v.id)}">${esc(v.title)}</option>`).join('')}</select>
+          </label>
+          <label class="product-option">Quantity
+            <input type="number" name="quantity" value="1" min="1" form="product-form-${esc(design.slug)}" />
+          </label>
+          <form class="product-form" action="/cart/add" method="post" id="product-form-${esc(design.slug)}">
+            <div class="product-form__buttons">
+              <button type="submit" name="add" class="theme-button">Add to cart</button>
+              <div class="shopify-payment-button"><button type="button" class="theme-button theme-button--dark">Buy it now</button></div>
+            </div>
+          </form>
+          <p class="product-desc">${esc(design.description)}</p>
+          <div class="personalize">
+            <div class="personalize__head"><span class="personalize__step">Step 1</span> Personalize your artwork</div>
+            <div data-ai-art-block data-design-id="${esc(design.id)}" data-variant-id="${esc(design.variantId)}" data-proxy-base="/apps/ai-art"></div>
+          </div>
+          <details><summary>Shipping</summary><p>Made to order and shipped within 3 to 5 business days. Free standard shipping.</p></details>
+          <details><summary>Returns</summary><p>Personalized items are made just for you. If anything arrives damaged, we reprint it free of charge.</p></details>
+        </div>`;
+      // The theme's product form: the widget reads the chosen size and quantity from it when the
+      // customer adds to cart, exactly as it does with a real Shopify theme.
+      for (const form of section.querySelectorAll('form[action="/cart/add"]')) form.addEventListener('submit', (e) => e.preventDefault());
+      // Thumbnails swap the large image, like a real product gallery.
+      const main = section.querySelector('[data-gallery-main]');
+      for (const thumb of section.querySelectorAll('[data-gallery-thumb]')) {
+        thumb.addEventListener('click', () => {
+          if (main) main.src = thumb.dataset.galleryThumb;
+          for (const t of section.querySelectorAll('[data-gallery-thumb]')) t.setAttribute('aria-current', String(t === thumb));
+        });
+      }
+      return section;
+    }
+
+    // Collection page: one card per live design, linking to that design's product page.
+    function collectionGrid(designs) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `
+        <h1 class="collection-title">Personalized art</h1>
+        <p class="collection-sub">Every design here is personalized with the customer's own photo. Open a product to try it.</p>
+        <div class="collection-grid">
+          ${designs
+            .map(
+              (d) => `
+            <a class="collection-item" href="/products/${esc(d.slug)}">
+              <div class="collection-item__img">
+                ${d.exampleImageUrl ? `<img src="${esc(d.exampleImageUrl)}" alt="${esc(d.name)} example" loading="lazy" />` : ''}
+                <span class="product-badge">AI personalized</span>
+              </div>
+              <span class="collection-item__name">${esc(d.name)}</span>
+              <span class="collection-item__price">From $${esc(d.price)}</span>
+              <span class="collection-item__cta">Personalize</span>
+            </a>`,
+            )
+            .join('')}
+        </div>`;
+      return wrap;
+    }
+
+    // Mirrors Shopify's URLs: `/products/<handle>` is one product page with the widget, everything
+    // else (home, `/collections/...`) is the shop listing. The dev server serves this file for every
+    // path, so plain links work.
+    const designs = await fetch('/harness/designs').then((r) => r.json());
+    const breadcrumb = document.getElementById('breadcrumb');
+    const note = document.getElementById('demo-note');
+    const productMatch = location.pathname.match(/^\/products\/([^/]+)\/?$/);
+    loadingEl.hidden = true;
+    productsEl.hidden = false;
+
+    if (designs.length === 0) {
+      productsEl.innerHTML = '<p class="empty">No live designs found. Run <code>pnpm bootstrap</code> (or <code>pnpm db:seed</code>) first.</p>';
+    } else if (productMatch) {
+      const design = designs.find((d) => d.slug === productMatch[1]);
+      if (!design) {
+        productsEl.innerHTML = `<p class="empty">No live design with the handle "${esc(productMatch[1])}". <a href="/collections/all">Back to the shop</a>.</p>`;
+      } else {
+        document.title = `${design.name} | Aurora Prints`;
+        breadcrumb.innerHTML = `<a href="/">Home</a> / <a href="/collections/all">Personalized art</a> / ${esc(design.name)}`;
+        note.innerHTML = `<strong>Test page</strong><span>This imitates one Shopify product page. Only the "Personalize your artwork" box comes from the app; the rest is a stand in for the merchant's theme.</span><a href="/collections/all">All demo designs</a>`;
+        note.hidden = false;
+        productsEl.appendChild(productSection(design));
+      }
+    } else {
+      note.innerHTML = `<strong>Test store</strong><span>One product for each live design in the admin (${designs.length} right now). Open one to see the customer flow.</span>`;
+      note.hidden = false;
+      productsEl.appendChild(collectionGrid(designs));
+    }
+
+    async function simulate(topic) {
+      output.textContent = `Sending ${topic}`;
+      const res = await fetch('/harness/simulate-order', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ topic }),
+      });
+      output.textContent = `${topic} -> HTTP ${res.status}\n${await res.text()}`;
+    }
+    document.getElementById('sim-create').onclick = () => simulate('orders/create');
+    document.getElementById('sim-paid').onclick = () => simulate('orders/paid');
+    document.getElementById('sim-cancel').onclick = () => simulate('orders/cancelled');
+    document.getElementById('show-cart').onclick = async () => {
+      const cart = await refreshCart();
+      output.textContent = JSON.stringify(cart, null, 2);
+    };
+    document.getElementById('cart-button').onclick = async () => {
+      const cart = await refreshCart();
+      output.textContent = JSON.stringify(cart, null, 2);
+      panel.open = true;
+      panel.scrollIntoView({ behavior: 'smooth' });
+    };
+  </script>
+  <script type="module" src="/src/widget/main.ts"></script>
+</body>
+</html>

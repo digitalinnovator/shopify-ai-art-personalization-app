@@ -1,0 +1,751 @@
+/*
+  AI Art Preview widget. Scoped under .aiart-widget so nothing leaks into or out of the theme.
+  Theme-neutral: inherits the theme font, uses a near-black accent by default, and every color is
+  a variable the merchant can override from the block (e.g. --aiart-accent). Mobile-first.
+*/
+.aiart-widget {
+  --aiart-font: inherit;
+  --aiart-ink: #111111;
+  --aiart-muted: #6b6b6b;
+  --aiart-line: #e4e4e4;
+  --aiart-surface: #ffffff;
+  --aiart-soft: #f6f6f6;
+  --aiart-accent: #111111;
+  --aiart-accent-ink: #ffffff;
+  --aiart-error: #b42318;
+  --aiart-error-bg: #fef3f2;
+  --aiart-warn: #b54708;
+  --aiart-warn-bg: #fffaeb;
+  --aiart-success: #067647;
+  --aiart-success-bg: #ecfdf3;
+  --aiart-radius: 14px;
+  --aiart-radius-sm: 10px;
+  --aiart-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
+
+  font-family: var(--aiart-font);
+  color: var(--aiart-ink);
+  line-height: 1.45;
+  width: 100%;
+  min-width: 0;
+  max-width: 560px;
+  margin: 0 auto;
+  /* Layout follows the width of the column the block sits in, not the page: theme product
+     columns are often 300px wide on a 1400px screen. */
+  container-type: inline-size;
+  container-name: aiart;
+  -webkit-font-smoothing: antialiased;
+}
+
+.aiart-widget *,
+.aiart-widget *::before,
+.aiart-widget *::after {
+  box-sizing: border-box;
+}
+
+.aiart-widget button,
+.aiart-widget input,
+.aiart-widget label {
+  font: inherit;
+}
+
+.aiart-widget p,
+.aiart-widget h3,
+.aiart-widget ul,
+.aiart-widget ol {
+  margin: 0;
+}
+
+.aiart-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.aiart-icon {
+  display: inline-flex;
+  flex: none;
+  line-height: 0;
+}
+
+/* ---------- Card ---------- */
+.aiart-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: var(--aiart-surface);
+  border: 1px solid var(--aiart-line);
+  border-radius: var(--aiart-radius);
+  box-shadow: var(--aiart-shadow);
+}
+
+.aiart-card--flat {
+  box-shadow: none;
+}
+
+.aiart-heading {
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.aiart-heading:focus {
+  outline: none;
+}
+
+.aiart-hint {
+  color: var(--aiart-muted);
+  font-size: 0.92rem;
+}
+
+/* ---------- Stepper ---------- */
+.aiart-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+}
+
+.aiart-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--aiart-muted);
+}
+
+.aiart-step:not(:last-child)::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  min-width: 8px;
+  background: var(--aiart-line);
+  border-radius: 2px;
+}
+
+.aiart-step[data-state="done"]:not(:last-child)::after {
+  background: var(--aiart-accent);
+}
+
+.aiart-step__dot {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid var(--aiart-line);
+  background: var(--aiart-surface);
+  font-size: 0.75rem;
+  color: var(--aiart-muted);
+}
+
+.aiart-step[data-state="active"] {
+  color: var(--aiart-ink);
+}
+
+.aiart-step[data-state="active"] .aiart-step__dot {
+  border-color: var(--aiart-accent);
+  color: var(--aiart-accent);
+}
+
+.aiart-step[data-state="done"] .aiart-step__dot {
+  border-color: var(--aiart-accent);
+  background: var(--aiart-accent);
+  color: var(--aiart-accent-ink);
+}
+
+.aiart-step__label {
+  white-space: nowrap;
+}
+
+/* ---------- Examples strip ---------- */
+.aiart-examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+  max-width: 400px;
+}
+
+.aiart-examples img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--aiart-radius-sm);
+  background: var(--aiart-soft);
+}
+
+/* ---------- Dropzone ---------- */
+.aiart-dropzone {
+  position: relative;
+  border: 1.5px dashed var(--aiart-line);
+  border-radius: var(--aiart-radius);
+  background: var(--aiart-soft);
+  padding: 22px 16px;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.aiart-dropzone[data-dragging] {
+  border-color: var(--aiart-accent);
+  background: #f0f0f0;
+}
+
+.aiart-dropzone[data-has-photo] {
+  border-style: solid;
+  padding: 12px;
+}
+
+.aiart-dropzone__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.aiart-dropzone__icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--aiart-surface);
+  border: 1px solid var(--aiart-line);
+  color: var(--aiart-ink);
+}
+
+.aiart-dropzone__title {
+  font-weight: 600;
+}
+
+.aiart-dropzone__hint {
+  font-size: 0.8rem;
+  color: var(--aiart-muted);
+}
+
+.aiart-dropzone__photo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.aiart-dropzone__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.aiart-dropzone__name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.aiart-dropzone__size {
+  font-size: 0.8rem;
+  color: var(--aiart-muted);
+  margin-bottom: 4px;
+}
+
+.aiart-photo {
+  width: 88px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: var(--aiart-radius-sm);
+  flex: none;
+  background: var(--aiart-soft);
+}
+
+.aiart-photo--sm {
+  width: 56px;
+  height: 70px;
+}
+
+.aiart-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* ---------- Consent and fields ---------- */
+.aiart-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.aiart-consent input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--aiart-accent);
+  cursor: pointer;
+}
+
+.aiart-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.aiart-text-input {
+  border: 1px solid var(--aiart-line);
+  border-radius: var(--aiart-radius-sm);
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-weight: 400;
+  background: var(--aiart-surface);
+  color: var(--aiart-ink);
+}
+
+.aiart-text-input:focus {
+  outline: 2px solid var(--aiart-accent);
+  outline-offset: 1px;
+  border-color: var(--aiart-accent);
+}
+
+/* ---------- Buttons ---------- */
+.aiart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 10px 18px;
+  border-radius: var(--aiart-radius-sm);
+  border: 1px solid var(--aiart-line);
+  background: var(--aiart-surface);
+  color: var(--aiart-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 100ms ease;
+}
+
+.aiart-btn:hover {
+  background: var(--aiart-soft);
+}
+
+.aiart-btn:active {
+  transform: translateY(1px);
+}
+
+.aiart-btn:focus-visible,
+.aiart-zoom:focus-visible,
+.aiart-lightbox__close:focus-visible {
+  outline: 3px solid var(--aiart-accent);
+  outline-offset: 2px;
+}
+
+.aiart-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.aiart-btn-primary {
+  background: var(--aiart-accent);
+  border-color: var(--aiart-accent);
+  color: var(--aiart-accent-ink);
+}
+
+.aiart-btn-primary:hover {
+  background: var(--aiart-accent);
+  filter: brightness(1.15);
+}
+
+.aiart-btn--secondary {
+  background: var(--aiart-surface);
+}
+
+.aiart-btn--plain {
+  border-color: transparent;
+  background: transparent;
+  color: var(--aiart-muted);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.aiart-btn--plain:hover {
+  background: var(--aiart-soft);
+  color: var(--aiart-ink);
+}
+
+.aiart-btn--block {
+  width: 100%;
+}
+
+.aiart-btn--sm {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.aiart-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aiart-actions--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ---------- Alerts ---------- */
+.aiart-alert {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--aiart-radius-sm);
+  font-size: 0.9rem;
+  background: var(--aiart-soft);
+  color: var(--aiart-ink);
+}
+
+.aiart-alert:focus {
+  outline: none;
+}
+
+.aiart-alert[data-tone="error"] {
+  background: var(--aiart-error-bg);
+  color: var(--aiart-error);
+}
+
+.aiart-alert[data-tone="warning"] {
+  background: var(--aiart-warn-bg);
+  color: var(--aiart-warn);
+}
+
+.aiart-alert[data-tone="info"] {
+  background: var(--aiart-success-bg);
+  color: var(--aiart-success);
+}
+
+.aiart-alert__text {
+  flex: 1;
+}
+
+.aiart-tips {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--aiart-muted);
+}
+
+.aiart-tips li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiart-tips .aiart-icon {
+  color: var(--aiart-success);
+}
+
+/* ---------- Progress ---------- */
+.aiart-working {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.aiart-working__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aiart-progress {
+  position: relative;
+  height: 8px;
+  border-radius: 99px;
+  background: var(--aiart-line);
+  overflow: hidden;
+}
+
+.aiart-progress__bar {
+  height: 100%;
+  width: 0;
+  background: var(--aiart-accent);
+  border-radius: 99px;
+  transition: width 200ms ease;
+}
+
+.aiart-progress[data-indeterminate] .aiart-progress__bar {
+  width: 40%;
+  animation: aiart-slide 1.3s ease-in-out infinite;
+}
+
+@keyframes aiart-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+/* ---------- Compare (A/B) ---------- */
+.aiart-compare {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.aiart-preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--aiart-line);
+  border-radius: var(--aiart-radius);
+  padding: 10px;
+  background: var(--aiart-surface);
+}
+
+.aiart-preview-card__media {
+  position: relative;
+  border-radius: var(--aiart-radius-sm);
+  overflow: hidden;
+  background: var(--aiart-soft);
+}
+
+.aiart-preview-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.aiart-preview-card__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--aiart-muted);
+}
+
+.aiart-zoom {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--aiart-ink);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.aiart-zoom:hover {
+  background: #fff;
+}
+
+.aiart-preview-card--failed {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--aiart-muted);
+  font-size: 0.9rem;
+  aspect-ratio: 4 / 5;
+  background: var(--aiart-soft);
+  border-style: dashed;
+}
+
+.aiart-skeleton {
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(90deg, #ececec 25%, #f7f7f7 37%, #ececec 63%);
+  background-size: 400% 100%;
+  animation: aiart-shimmer 1.4s ease infinite;
+  border-radius: var(--aiart-radius);
+  border: 0;
+  padding: 0;
+}
+
+.aiart-skeleton--line {
+  aspect-ratio: auto;
+  height: 22px;
+  width: 60%;
+  border-radius: 6px;
+}
+
+.aiart-skeleton--block {
+  aspect-ratio: auto;
+  height: 140px;
+}
+
+@keyframes aiart-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* ---------- Lightbox ---------- */
+.aiart-lightbox {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: min(92vw, 720px);
+  max-height: 92vh;
+}
+
+.aiart-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.aiart-lightbox img {
+  display: block;
+  max-width: min(92vw, 720px);
+  max-height: 84vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #000;
+}
+
+.aiart-lightbox__caption {
+  margin: 10px 0 0;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.aiart-lightbox__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  cursor: pointer;
+}
+
+/* ---------- Selected and done ---------- */
+.aiart-selected {
+  display: flex;
+  justify-content: center;
+}
+
+.aiart-selected-image {
+  width: 100%;
+  max-width: 300px;
+  border-radius: var(--aiart-radius);
+  box-shadow: var(--aiart-shadow);
+}
+
+.aiart-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.aiart-done__icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--aiart-success-bg);
+  color: var(--aiart-success);
+  margin-bottom: 4px;
+}
+
+.aiart-success {
+  color: var(--aiart-success);
+  font-weight: 650;
+  font-size: 1.1rem;
+}
+
+.aiart-success:focus {
+  outline: none;
+}
+
+/* ---------- Responsive: by the block's own width ---------- */
+@container aiart (min-width: 460px) {
+  .aiart-compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@container aiart (max-width: 459px) {
+  .aiart-step__label {
+    display: none;
+  }
+
+  .aiart-step[data-state="active"] .aiart-step__label {
+    display: inline;
+  }
+
+  .aiart-card {
+    padding: 16px;
+  }
+}
+
+/* Sticky primary action only on real phones, where the viewport itself is narrow. */
+@media (max-width: 639px) {
+  .aiart-actions:not(.aiart-actions--row) {
+    position: sticky;
+    bottom: 0;
+    padding-top: 8px;
+    background: linear-gradient(to top, var(--aiart-surface) 70%, rgba(255, 255, 255, 0));
+  }
+}
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .aiart-skeleton,
+  .aiart-progress[data-indeterminate] .aiart-progress__bar {
+    animation: none;
+  }
+
+  .aiart-btn,
+  .aiart-dropzone,
+  .aiart-progress__bar {
+    transition: none;
+  }
+}

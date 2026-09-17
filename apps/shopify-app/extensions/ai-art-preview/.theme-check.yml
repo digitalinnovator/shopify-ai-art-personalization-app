@@ -1,0 +1,8 @@
+# Theme check flags app-block JavaScript above 10 KB (uncompressed). The widget is about 24 KB
+# minified but under 8 KB gzipped on the wire, because it ships its own UI, icons and copy instead
+# of loading a framework. The build guard in scripts/check-widget-size.mjs keeps it under 28 KB;
+# the threshold here matches that so theme check and the build agree.
+extends: theme-check:theme-app-extension
+AssetSizeAppBlockJavaScript:
+  enabled: true
+  thresholdInBytes: 30000

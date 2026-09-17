@@ -1,0 +1,4 @@
+# https://shopify.dev/docs/apps/build/online-store/theme-app-extensions/configuration
+name = "ai-art-preview"
+type = "theme"
+uid = "e89cfd47-d586-a128-e1d3-1fbefa471e0ce249fea3"

@@ -1,0 +1,107 @@
+/*
+  Design tokens for the admin. Polaris-inspired (the app runs inside the Shopify admin, so it
+  should feel native there) with the product's violet as the primary color. Every other stylesheet
+  reads from these variables; nothing else hard-codes a color, size or radius.
+*/
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --c-bg: #f1f1f1;
+  --c-bg-subdued: #f7f7f7;
+  --c-surface: #ffffff;
+  --c-surface-hover: #f6f6f6;
+  --c-surface-active: #ebebeb;
+  --c-surface-inverse: #303030;
+
+  /* Borders */
+  --c-border: #e3e3e3;
+  --c-border-strong: #c9c9c9;
+  --c-border-focus: #4b2fd6;
+
+  /* Text */
+  --c-text: #303030;
+  --c-text-secondary: #616161;
+  --c-text-disabled: #b5b5b5;
+  --c-text-inverse: #ffffff;
+  --c-link: #4b2fd6;
+
+  /* Primary (brand violet) */
+  --c-primary: #4b2fd6;
+  --c-primary-hover: #3f27b8;
+  --c-primary-active: #33209a;
+  --c-primary-subdued: #eeeafd;
+  --c-on-primary: #ffffff;
+
+  /* Critical actions */
+  --c-critical: #d72c0d;
+  --c-critical-hover: #b52a0c;
+  --c-critical-subdued: #fff1ef;
+
+  /* Sidebar (light, like the Shopify admin) */
+  --c-sidebar-bg: #ebebeb;
+  --c-sidebar-text: #303030;
+  --c-sidebar-muted: #616161;
+  --c-sidebar-hover: rgba(0, 0, 0, 0.05);
+  --c-sidebar-active: #ffffff;
+
+  /* Badge / banner tones */
+  --tone-success-bg: #cdfee1;
+  --tone-success-text: #0c5132;
+  --tone-info-bg: #e0f0ff;
+  --tone-info-text: #00527c;
+  --tone-attention-bg: #ffeb78;
+  --tone-attention-text: #4f4700;
+  --tone-warning-bg: #ffd6a4;
+  --tone-warning-text: #5e4200;
+  --tone-critical-bg: #fed3d1;
+  --tone-critical-text: #8e1f0b;
+  --tone-new-bg: #e8e3ff;
+  --tone-new-text: #3b2a9c;
+  --tone-neutral-bg: #e3e3e3;
+  --tone-neutral-text: #303030;
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+  --t-xs: 12px;
+  --t-sm: 13px;
+  --t-md: 14px;
+  --t-lg: 16px;
+  --t-xl: 20px;
+  --t-2xl: 24px;
+  --t-3xl: 28px;
+
+  /* Spacing */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+
+  /* Shape and depth */
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-full: 999px;
+  --sh-card: 0 1px 0 rgba(26, 26, 26, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --sh-raised: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --sh-modal: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+  /* Layout */
+  --sidebar-w: 240px;
+  --topbar-h: 56px;
+  --page-max: 1200px;
+  --z-sticky: 10;
+  --z-topbar: 40;
+  --z-drawer: 50;
+  --z-toast: 60;
+  --z-modal: 70;
+
+  /* Motion */
+  --dur: 150ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

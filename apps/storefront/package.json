@@ -1,0 +1,18 @@
+{
+  "name": "@aiart/storefront",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --import tsx node_modules/vite/bin/vite.js",
+    "build:widget": "vite build --config vite.widget.config.ts && node ../../scripts/check-widget-size.mjs && node ../../scripts/copy-widget.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aiart/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@aiart/core": "workspace:*",
+    "vite": "7.3.6"
+  }
+}

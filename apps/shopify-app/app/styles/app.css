@@ -1,0 +1,5 @@
+/* Single entry point, loaded via `links` in root.tsx. Vite inlines these imports. */
+@import "./tokens.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./components.css";

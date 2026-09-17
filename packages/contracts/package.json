@@ -1,0 +1,18 @@
+{
+  "name": "@aiart/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser-safe schemas, types and constants shared by the storefront widget, API, worker and admin.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./constants": "./src/constants.ts",
+    "./statuses": "./src/statuses.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "zod": "4.6.2"
+  }
+}

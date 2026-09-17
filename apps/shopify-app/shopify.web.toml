@@ -1,0 +1,7 @@
+# Tells `shopify app dev` how to run this app's web process. The CLI passes PORT, SHOPIFY_API_KEY,
+# SHOPIFY_API_SECRET, SCOPES and SHOPIFY_APP_URL (its tunnel URL) to the command below.
+name = "admin"
+roles = ["frontend", "backend"]
+
+[commands]
+dev = "pnpm dev:shopify"
