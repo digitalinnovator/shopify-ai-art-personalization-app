@@ -15,6 +15,10 @@ The whole system runs on a local machine with a **mock AI provider**, so no Shop
 keys or hosting are needed to try it. [docs/GO-LIVE.md](docs/GO-LIVE.md) lists what to plug in for
 production.
 
+![The personalize step on a Shopify product page](docs/screenshots/01-product-page.png)
+
+<p align="center"><em>The block on a product page: the customer uploads a photo and gets two AI previews without leaving the page.</em></p>
+
 ## How it works
 
 1. **Upload.** On the Shopify product page the customer uploads a photo and gives consent. Large
@@ -29,6 +33,66 @@ production.
    hidden, so a personalized product can't be bought without a preview.
 6. **Order.** Shopify order webhooks match the order to the preview, and the full resolution file is
    released once the order is paid.
+
+## Screenshots
+
+All screenshots come from the local demo, where a mock provider stands in for the AI model, so the
+previews carry a "PREVIEW" watermark and a mock label.
+
+### Customer flow
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/02-generating.png" alt="Two previews being generated"></td>
+<td width="50%"><img src="docs/screenshots/03-choose-preview.png" alt="Two previews side by side with a choose button under each"></td>
+</tr>
+<tr>
+<td align="center"><b>Generating.</b> Progress and placeholders while both slots run.</td>
+<td align="center"><b>Choose.</b> Preview A and Preview B side by side, with one retry left.</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/04-selected.png" alt="The chosen preview shown large with an add to cart button"></td>
+<td width="50%"><img src="docs/screenshots/05-added-to-cart.png" alt="Confirmation that the personalized item was added to the cart"></td>
+</tr>
+<tr>
+<td align="center"><b>Selected.</b> The chosen artwork, ready to add to the cart.</td>
+<td align="center"><b>Added.</b> The choice travels with the cart line to the order.</td>
+</tr>
+</table>
+
+<p align="center">
+  <img src="docs/screenshots/15-phone-choose.png" alt="The same choose step on a phone screen" width="330">
+</p>
+<p align="center"><em>The same step on a phone.</em></p>
+
+### Admin panel
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/06-admin-dashboard.png" alt="Admin dashboard with live designs, previews today, orders needing attention and recent activity"></td>
+<td width="50%"><img src="docs/screenshots/07-admin-designs.png" alt="List of designs with thumbnails, status, linked products and versions"></td>
+</tr>
+<tr>
+<td align="center"><b>Dashboard.</b> Live designs, previews today, orders needing attention, recent activity.</td>
+<td align="center"><b>Designs.</b> Every art style with its status, linked products and versions.</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/09-admin-model-slots.png" alt="Provider and model dropdowns for preview slot A and B with an estimated cost per customer"></td>
+<td width="50%"><img src="docs/screenshots/14-admin-models.png" alt="Model catalog grouped by provider with reference image limits and indicative prices"></td>
+</tr>
+<tr>
+<td align="center"><b>Model per slot.</b> Provider and model in a dropdown, with the estimated cost per customer.</td>
+<td align="center"><b>Models.</b> Every provider and model, with indicative prices and the date they were checked.</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/11-admin-generation-detail.png" alt="One generation with both previews, the customer photo, model, timings and attempts"></td>
+<td width="50%"><img src="docs/screenshots/13-admin-order-detail.png" alt="One order with the chosen preview, release status and a download link for the final file"></td>
+</tr>
+<tr>
+<td align="center"><b>Generation.</b> Both previews with model, timings and attempts.</td>
+<td align="center"><b>Order.</b> The chosen artwork, release status and the final file to download.</td>
+</tr>
+</table>
 
 ## Features
 
