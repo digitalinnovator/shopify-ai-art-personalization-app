@@ -29,6 +29,6 @@
     "@shopify/cli": "^4.8.0",
     "@types/react": "18.3.31",
     "@types/react-dom": "18.3.7",
-    "vite": "7.3.6"
+    "vite": "7.3.7"
   }
 }
